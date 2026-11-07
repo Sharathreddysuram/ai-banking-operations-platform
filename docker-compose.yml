@@ -125,8 +125,9 @@ services:
       REDIS_PORT: 6379
       JWT_SECRET: ${JWT_SECRET:-banking-platform-dev-secret-change-in-production-please-use-a-long-random-value}
       AI_MODE: ${AI_MODE:-fallback}
-      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-}
-      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-}
+      SPRING_MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING: "true"
+      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-https://placeholder.openai.azure.com/}
+      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-placeholder}
       AZURE_OPENAI_DEPLOYMENT: ${AZURE_OPENAI_DEPLOYMENT:-gpt-4o-mini}
     ports:
       - "8081:8081"
@@ -158,8 +159,9 @@ services:
       REDIS_PORT: 6379
       JWT_SECRET: ${JWT_SECRET:-banking-platform-dev-secret-change-in-production-please-use-a-long-random-value}
       AI_MODE: ${AI_MODE:-fallback}
-      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-}
-      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-}
+      SPRING_MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING: "true"
+      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-https://placeholder.openai.azure.com/}
+      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-placeholder}
       AZURE_OPENAI_DEPLOYMENT: ${AZURE_OPENAI_DEPLOYMENT:-gpt-4o-mini}
     ports:
       - "8082:8082"
@@ -191,8 +193,9 @@ services:
       REDIS_PORT: 6379
       JWT_SECRET: ${JWT_SECRET:-banking-platform-dev-secret-change-in-production-please-use-a-long-random-value}
       AI_MODE: ${AI_MODE:-fallback}
-      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-}
-      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-}
+      SPRING_MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING: "true"
+      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-https://placeholder.openai.azure.com/}
+      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-placeholder}
       AZURE_OPENAI_DEPLOYMENT: ${AZURE_OPENAI_DEPLOYMENT:-gpt-4o-mini}
     ports:
       - "8083:8083"
@@ -224,8 +227,9 @@ services:
       REDIS_PORT: 6379
       JWT_SECRET: ${JWT_SECRET:-banking-platform-dev-secret-change-in-production-please-use-a-long-random-value}
       AI_MODE: ${AI_MODE:-fallback}
-      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-}
-      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-}
+      SPRING_MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING: "true"
+      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-https://placeholder.openai.azure.com/}
+      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-placeholder}
       AZURE_OPENAI_DEPLOYMENT: ${AZURE_OPENAI_DEPLOYMENT:-gpt-4o-mini}
     ports:
       - "8084:8084"
@@ -257,8 +261,9 @@ services:
       REDIS_PORT: 6379
       JWT_SECRET: ${JWT_SECRET:-banking-platform-dev-secret-change-in-production-please-use-a-long-random-value}
       AI_MODE: ${AI_MODE:-fallback}
-      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-}
-      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-}
+      SPRING_MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING: "true"
+      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-https://placeholder.openai.azure.com/}
+      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-placeholder}
       AZURE_OPENAI_DEPLOYMENT: ${AZURE_OPENAI_DEPLOYMENT:-gpt-4o-mini}
     ports:
       - "8085:8085"
@@ -291,8 +296,9 @@ services:
       REDIS_PORT: 6379
       JWT_SECRET: ${JWT_SECRET:-banking-platform-dev-secret-change-in-production-please-use-a-long-random-value}
       AI_MODE: ${AI_MODE:-fallback}
-      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-}
-      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-}
+      SPRING_MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING: "true"
+      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-https://placeholder.openai.azure.com/}
+      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-placeholder}
       AZURE_OPENAI_DEPLOYMENT: ${AZURE_OPENAI_DEPLOYMENT:-gpt-4o-mini}
       AUTH_SERVICE_URL: http://auth-service:8081
       KYC_SERVICE_URL: http://kyc-service:8082
@@ -343,8 +349,9 @@ services:
       REDIS_PORT: 6379
       JWT_SECRET: ${JWT_SECRET:-banking-platform-dev-secret-change-in-production-please-use-a-long-random-value}
       AI_MODE: ${AI_MODE:-fallback}
-      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-}
-      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-}
+      SPRING_MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING: "true"
+      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-https://placeholder.openai.azure.com/}
+      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-placeholder}
       AZURE_OPENAI_DEPLOYMENT: ${AZURE_OPENAI_DEPLOYMENT:-gpt-4o-mini}
       AUTH_SERVICE_URL: http://auth-service:8081
       KYC_SERVICE_URL: http://kyc-service:8082
@@ -362,13 +369,14 @@ services:
   # ---------------------------------------------------------------------------
   frontend:
     build:
-      context: .
-      dockerfile: frontend/Dockerfile
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: banking-frontend
     restart: unless-stopped
     depends_on:
       - api-gateway
     ports:
+      - "80:80"
       - "3000:80"
     networks:
       - banking-network
