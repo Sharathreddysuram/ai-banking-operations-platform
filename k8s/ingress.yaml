@@ -1,0 +1,43 @@
+# Requires an ingress controller in the cluster (e.g. ingress-nginx).
+# Routes:
+#   /     -> frontend      (React SPA)
+#   /api  -> api-gateway   (all REST traffic)
+#   /ws   -> api-gateway   (STOMP WebSocket, proxied to decision-service)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: banking-ingress
+  namespace: banking-platform
+  labels:
+    app.kubernetes.io/name: ai-banking-operations-platform
+    app.kubernetes.io/part-of: banking-platform
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: banking.local
+      http:
+        paths:
+          - path: /ws
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway
+                port:
+                  number: 8080
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway
+                port:
+                  number: 8080
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80

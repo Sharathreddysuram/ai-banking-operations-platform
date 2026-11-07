@@ -1,0 +1,55 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:5173"
+              - "http://localhost:3000"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+      routes:
+        - id: auth-service
+          uri: ${AUTH_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/api/auth/**
+        - id: kyc-service
+          uri: ${KYC_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/api/kyc/**
+        - id: fraud-service
+          uri: ${FRAUD_SERVICE_URL:http://localhost:8083}
+          predicates:
+            - Path=/api/fraud/**
+        - id: loan-service
+          uri: ${LOAN_SERVICE_URL:http://localhost:8084}
+          predicates:
+            - Path=/api/loan/**
+        - id: support-service
+          uri: ${SUPPORT_SERVICE_URL:http://localhost:8085}
+          predicates:
+            - Path=/api/support/**
+        - id: decision-service
+          uri: ${DECISION_SERVICE_URL:http://localhost:8086}
+          predicates:
+            - Path=/api/decision/**
+        - id: decision-service-websocket
+          uri: ${DECISION_SERVICE_WS_URL:ws://localhost:8086}
+          predicates:
+            - Path=/ws/**
+
+jwt:
+  secret: ${JWT_SECRET:dev-secret-key-for-ai-banking-platform-2026-change-me}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

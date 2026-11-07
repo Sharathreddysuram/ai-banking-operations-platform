@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: banking-config
+  namespace: banking-platform
+  labels:
+    app.kubernetes.io/name: ai-banking-operations-platform
+    app.kubernetes.io/part-of: banking-platform
+data:
+  # --- Database (non-secret parts only; the password lives in the Secret) ---
+  # DB_URL is set per-service in each Deployment, because every service owns
+  # its own database: jdbc:postgresql://postgres:5432/<service>_db
+  DB_HOST: "postgres"
+  DB_PORT: "5432"
+  DB_USERNAME: "bank"
+
+  # --- Kafka (in-cluster listener) ---
+  KAFKA_BOOTSTRAP_SERVICES: "kafka:29092"
+
+  # --- Redis ---
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+
+  # --- AI layer ---
+  # fallback = deterministic in-code reasoning engine (no external calls)
+  # azure    = Spring AI ChatClient against Azure OpenAI (secret below)
+  AI_MODE: "fallback"
+  AZURE_OPENAI_ENDPOINT: ""
+  AZURE_OPENAI_DEPLOYMENT: "gpt-4o-mini"
+
+  # --- Service discovery (used by api-gateway and decision-service) ---
+  AUTH_SERVICE_URL: "http://auth-service:8081"
+  KYC_SERVICE_URL: "http://kyc-service:8082"
+  FRAUD_SERVICE_URL: "http://fraud-service:8083"
+  LOAN_SERVICE_URL: "http://loan-service:8084"
+  SUPPORT_SERVICE_URL: "http://support-service:8085"
+  DECISION_SERVICE_URL: "http://decision-service:8086"

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: banking-platform
+  labels:
+    app.kubernetes.io/name: ai-banking-operations-platform
+    app.kubernetes.io/part-of: banking-platform

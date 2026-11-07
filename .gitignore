@@ -1,0 +1,38 @@
+# Build output
+target/
+*/target/
+
+# Node / frontend
+node_modules/
+dist/
+*/node_modules/
+*/dist/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+k8s/secret.yaml
+
+# IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+bin/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Misc
+*.class

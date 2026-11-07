@@ -1,0 +1,70 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: decision-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/decision_db}
+    username: ${DB_USERNAME:bank}
+    password: ${DB_PASSWORD:bankpass}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: decision-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  ai:
+    azure:
+      openai:
+        endpoint: ${AZURE_OPENAI_ENDPOINT:https://placeholder.openai.azure.com/}
+        api-key: ${AZURE_OPENAI_API_KEY:placeholder}
+        chat:
+          options:
+            deployment-name: ${AZURE_OPENAI_DEPLOYMENT:gpt-4o}
+        embedding:
+          options:
+            deployment-name: ${AZURE_OPENAI_EMBEDDING_DEPLOYMENT:text-embedding-ada-002}
+
+ai:
+  mode: ${AI_MODE:fallback}
+
+jwt:
+  secret: ${JWT_SECRET:dev-secret-key-for-ai-banking-platform-2026-change-me}
+
+services:
+  kyc-url: ${KYC_SERVICE_URL:http://localhost:8082}
+  fraud-url: ${FRAUD_SERVICE_URL:http://localhost:8083}
+  loan-url: ${LOAN_SERVICE_URL:http://localhost:8084}
+  support-url: ${SUPPORT_SERVICE_URL:http://localhost:8085}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs

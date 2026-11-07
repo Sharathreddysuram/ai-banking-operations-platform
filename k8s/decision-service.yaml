@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: decision-service
+  namespace: banking-platform
+  labels:
+    app: decision-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: decision-service
+  template:
+    metadata:
+      labels:
+        app: decision-service
+    spec:
+      containers:
+        - name: decision-service
+          image: ai-banking/decision-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8086
+          envFrom:
+            - configMapRef:
+                name: banking-config
+            - secretRef:
+                name: banking-secrets
+          env:
+            - name: DB_URL
+              value: "jdbc:postgresql://postgres:5432/decision_db"
+            - name: KYC_SERVICE_URL
+              value: "http://kyc-service:8082"
+            - name: FRAUD_SERVICE_URL
+              value: "http://fraud-service:8083"
+            - name: LOAN_SERVICE_URL
+              value: "http://loan-service:8084"
+            - name: SUPPORT_SERVICE_URL
+              value: "http://support-service:8085"
+            - name: AUTH_SERVICE_URL
+              value: "http://auth-service:8081"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8086
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8086
+            initialDelaySeconds: 40
+            periodSeconds: 20
+            failureThreshold: 6
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: decision-service
+  namespace: banking-platform
+  labels:
+    app: decision-service
+spec:
+  type: ClusterIP
+  selector:
+    app: decision-service
+  ports:
+    - name: http
+      port: 8086
+      targetPort: 8086
